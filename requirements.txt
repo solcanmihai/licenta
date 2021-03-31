@@ -1,0 +1,7 @@
+scipy
+scikit-learn
+tensorflow
+keras
+numpy
+pydub
+speechpy

@@ -47,7 +47,7 @@ class TrainingService:
     def train_model(self, save_name: str):
         hidden_layers = Sequential([
             Dense(256, activation='relu'),
-            # Dropout(0.2),
+            Dropout(0.2),
             Dense(256, activation='relu'),
             Dropout(0.2),
             Dense(256, activation='relu'),
@@ -77,7 +77,7 @@ class TrainingService:
 
         csv_logger = CSVLogger('training.log')
         model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
-        model.fit(X_train_filenames, to_categorical(y_train), batch_size=5000, epochs=1000, verbose=1,
+        model.fit(X_train_filenames, to_categorical(y_train), batch_size=len(X_train_filenames), epochs=1000, verbose=1,
                   validation_data=(X_val_filenames, to_categorical(y_val)), callbacks=[csv_logger])
 
         os.chdir(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', '..', 'trained_models'))

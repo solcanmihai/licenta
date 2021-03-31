@@ -17,9 +17,9 @@ if __name__ == '__main__':
     project_root_directory = os.getcwd()
     # trainer = TrainingService(14, 30, 10)
     #
-    # trainer.read_raw_speaker_data('E:\\LICENTA\\SPEECHDATA\\wav', first_n_utterances=50, first_n_speakers=10, skip_n_speakers=0)
+    # trainer.read_raw_speaker_data('E:\\LICENTA\\SPEECHDATA\\wav', first_n_utterances=10, first_n_speakers=50, skip_n_speakers=0)
     # trainer.extract_mfcc_from_raw_data()
-    # trainer.train_model('refactored_50_10_bigger_batch')
+    # trainer.train_model('hifi_10_50')
 
     trainer2 = TrainingService(14, 30, 10)
     trainer2.read_raw_speaker_data('E:\\LICENTA\\SPEECHDATA\\wav', first_n_utterances=1, first_n_speakers=5, skip_n_speakers=50)
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     trainer3.read_raw_speaker_data('E:\\LICENTA\\SPEECHDATA\\wav', first_n_utterances=1, first_n_speakers=5, skip_n_speakers=50)
     trainer3.extract_mfcc_from_raw_data()
 
-    enrollment = EnrollmentService("refactored_50_10_bigger_batch", project_root_directory)
+    enrollment = EnrollmentService("hifi_10_50", project_root_directory)
 
     for speaker in trainer2.speakers:
         enrollment.compute_d_vector(speaker)

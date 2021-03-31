@@ -21,6 +21,9 @@ from scipy.spatial import distance
 
 from src.entities.Speaker import Utterance, Speaker
 
+def check_if_hifi_microphone(utterance_name: str):
+    split_name = utterance_name.split('_')
+    return split_name[1] == "7"
 
 class TrainingService:
 
@@ -66,7 +69,7 @@ class TrainingService:
         x_data, y_data = self.build_training_data()
         filenames_shuffled, y_labels_shuffled = shuffle(x_data, y_data)
         X_train_filenames, X_val_filenames, y_train, y_val = train_test_split(np.array(filenames_shuffled),
-                                                                              y_labels_shuffled, test_size=0.1,
+                                                                              y_labels_shuffled, test_size=0.01,
                                                                               random_state=1)
 
         print(model.summary())
@@ -77,7 +80,7 @@ class TrainingService:
 
         csv_logger = CSVLogger('training.log')
         model.compile(optimizer=sgd, loss='categorical_crossentropy', metrics=['accuracy'])
-        model.fit(X_train_filenames, to_categorical(y_train), batch_size=len(X_train_filenames), epochs=1000, verbose=1,
+        model.fit(X_train_filenames, to_categorical(y_train), batch_size=1000, epochs=1000, verbose=1,
                   validation_data=(X_val_filenames, to_categorical(y_val)), callbacks=[csv_logger])
 
         os.chdir(os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', '..', 'trained_models'))
@@ -97,6 +100,8 @@ class TrainingService:
 
         for speaker_number, speaker_name in enumerate(speaker_names[skip_n_speakers:skip_n_speakers + first_n_speakers], start=skip_n_speakers):
             utterances_names = shuffle(os.listdir(speaker_name))
+
+            utterances_names = list(filter(check_if_hifi_microphone, utterances_names))
 
             speaker = Speaker(speaker_name, speaker_number, [], None)
 
